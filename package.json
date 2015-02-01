@@ -1,0 +1,24 @@
+{
+  "name": "f-dom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/fdom.js",
+  "scripts": {
+    "test": "grunt"
+  },
+  "author": "Jon Bretman <jon.bretman@gmail.com> (http://github.com/jonbretman)",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-karma": "^0.10.1",
+    "karma": "^0.12.31",
+    "karma-coverage": "^0.2.7",
+    "karma-expect": "^1.1.0",
+    "karma-mocha": "^0.1.10",
+    "karma-mocha-reporter": "^0.3.1",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-sinon": "^1.0.4",
+    "mocha": "^2.1.0",
+    "sinon": "^1.12.2"
+  }
+}
