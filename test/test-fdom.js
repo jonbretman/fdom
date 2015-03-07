@@ -168,4 +168,106 @@ describe('fdom', function () {
 
     });
 
+    describe('getText', function () {
+
+        it('should get the text content of the element', function () {
+            var el = document.createElement('div');
+            el.innerHTML = '<p>Hello <span>world</span></p>';
+            expect(fdom.getText(el)).to.equal('Hello world');
+        });
+
+    });
+
+    describe('setStyle', function () {
+
+        it('should set the style on the element', function () {
+            var el = document.createElement('div');
+            fdom.setStyle('color', 'red', el);
+            expect(el.style.color).to.equal('red');
+        });
+
+        it('should return the element', function () {
+            var el = document.createElement('div');
+            expect(fdom.setStyle('display', 'block', el)).to.equal(el);
+        });
+
+        it('should be curriable', function () {
+            var setStyle = fdom.setStyle('fontSize', '18px');
+            var el = document.createElement('div');
+            setStyle(el);
+            expect(el.style.fontSize).to.equal('18px');
+        });
+
+    });
+
+    describe('getStyle', function () {
+
+        it('should get the value of the given style property', function () {
+            var el = document.createElement('div');
+            el.className = 'get-style-test-el';
+            el.style.float = 'left';
+            expect(fdom.getStyle('float', el)).to.equal('left');
+
+            var style = document.createElement('style');
+            style.innerHTML = '.get-style-test-el { width: 10px; }';
+            document.querySelector('head').appendChild(style);
+
+            document.body.appendChild(el);
+            expect(fdom.getStyle('width', el)).to.equal('10px');
+        });
+
+    });
+
+    describe('getProp', function () {
+
+        it('should get the value of the property', function () {
+            var el = document.createElement('input');
+            el.type = 'email';
+            expect(fdom.getProp('type', el)).to.equal('email');
+        });
+
+        it('should be curriable', function () {
+            var getValue = fdom.getProp('value');
+            var el = document.createElement('input');
+            el.value = 'The value';
+            expect(getValue(el)).to.equal('The value');
+        });
+
+    });
+
+    describe('setProp', function () {
+
+        it('should set the value of the property', function () {
+            var el = document.createElement('input');
+            fdom.setProp('type', 'email', el);
+            expect(el.type).to.equal('email');
+        });
+
+        it('should be curriable', function () {
+            var getValue = fdom.getProp('value');
+            var el = document.createElement('input');
+            el.value = 'The value';
+            expect(getValue(el)).to.equal('The value');
+        });
+
+    });
+
+    describe('hasProp', function () {
+
+        it('should return true if the value of the property matches the given value', function () {
+            var el = document.createElement('input');
+            el.required = true;
+            expect(fdom.hasProp('required', true, el)).to.equal(true);
+            expect(fdom.hasProp('value', 'not the value', el)).to.equal(false);
+        });
+
+        it('should be curriable', function () {
+            var isRequired = fdom.hasProp('required', true);
+            var el = document.createElement('input');
+            el.required = true;
+            expect(isRequired(el)).to.equal(true);
+        });
+
+    });
+
 });

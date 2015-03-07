@@ -73,7 +73,7 @@
         }),
 
         getStyle: curriable(2, function (prop, element) {
-            return getComputedStyle(element, null)[prop];
+            return element.style[prop] || getComputedStyle(element, null)[prop];
         }),
 
         getProp: curriable(2, function (prop, element) {
