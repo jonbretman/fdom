@@ -31,8 +31,8 @@ $('.foo')
 // fdom
 fdom.query('foo', document.body)
     .map(fdom.addClass('new-class'))
-    .map(fdom.setHTML('<p></p>')
+    .map(fdom.setHTML('<p></p>'))
     .map(fdom.query('.bar'))
-    .reduce(fdom.flatten)
+    .reduce(fdom.flatten))
     .map(fdom.removeClass('old-class'));
 ```
