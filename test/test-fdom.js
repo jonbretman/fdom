@@ -270,4 +270,38 @@ describe('fdom', function () {
 
     });
 
+    describe('getAttr', function () {
+
+        it('should return the value of the attribute', function () {
+            var el = document.createElement('div');
+            el.setAttribute('some-attribute', 'some-value');
+            expect(fdom.getAttr('some-attribute', el)).to.equal('some-value');
+        });
+
+        it('should be curriable', function () {
+            var getClasses = fdom.getAttr('class');
+            var el = document.createElement('div');
+            el.className = 'one two three';
+            expect(getClasses(el)).to.equal('one two three');
+        });
+
+    });
+
+    describe('setAttr', function () {
+
+        it('should set the attribute', function () {
+            var el = document.createElement('div');
+            fdom.setAttr('some-attribute', 'some-value', el);
+            expect(el.getAttribute('some-attribute')).to.equal('some-value');
+        });
+
+        it('should be curriable', function () {
+            var setAttr = fdom.setAttr('some-attribute', 'some-value');
+            var el = document.createElement('div');
+            setAttr(el);
+            expect(el.getAttribute('some-attribute')).to.equal('some-value');
+        });
+
+    });
+
 });

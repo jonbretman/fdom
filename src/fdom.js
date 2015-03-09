@@ -8,7 +8,8 @@
 
     var slice = [].slice;
 
-    function curriable(arrity, fn) {
+    function curriable(fn) {
+        var arrity = fn.length;
         return function () {
             var args = slice.call(arguments);
             if (args.length < arrity) {
@@ -31,25 +32,25 @@
 
     return {
 
-        query: curriable(2, function (selector, element) {
+        query: curriable(function (selector, element) {
             return slice.call((element || document).querySelectorAll(selector));
         }),
 
-        addClass: curriable(2, function (className, element) {
+        addClass: curriable(function (className, element) {
             element.classList.add(className);
             return element;
         }),
 
-        removeClass: curriable(2, function (className, element) {
+        removeClass: curriable(function (className, element) {
             element.classList.remove(className);
             return element;
         }),
 
-        hasClass: curriable(2, function (className, element) {
+        hasClass: curriable(function (className, element) {
             return element.classList.contains(className);
         }),
 
-        setHTML: curriable(2, function (html, element) {
+        setHTML: curriable(function (html, element) {
             element.innerHTML = html;
             return element;
         }),
@@ -58,7 +59,7 @@
             return element.innerHTML;
         },
 
-        setText: curriable(2, function (text, element) {
+        setText: curriable(function (text, element) {
             element.textContent = text;
             return element;
         }),
@@ -67,38 +68,38 @@
             return element.textContent;
         },
 
-        setStyle: curriable(3, function (prop, value, element) {
+        setStyle: curriable(function (prop, value, element) {
             element.style[prop] = value;
             return element;
         }),
 
-        getStyle: curriable(2, function (prop, element) {
+        getStyle: curriable(function (prop, element) {
             return element.style[prop] || getComputedStyle(element, null)[prop];
         }),
 
-        getProp: curriable(2, function (prop, element) {
+        getProp: curriable(function (prop, element) {
             return element[prop];
         }),
 
-        setProp: curriable(2, function (prop, value, element) {
+        setProp: curriable(function (prop, value, element) {
             element[prop] = value;
             return element;
         }),
 
-        hasProp: curriable(3, function (prop, value, element) {
+        hasProp: curriable(function (prop, value, element) {
             return element[prop] === value;
         }),
 
-        getAttr: curriable(2, function (key, element) {
+        getAttr: curriable(function (key, element) {
             return element.getAttribute(key);
         }),
 
-        setAttr: curriable(2, function (key, value, element) {
+        setAttr: curriable(function (key, value, element) {
             element.setAttribute(key, value);
             return element;
         }),
 
-        hasAttr: curriable(3, function (name, value, element) {
+        hasAttr: curriable(function (name, value, element) {
             return element.getAttribute(name) === value;
         }),
 
@@ -110,12 +111,12 @@
             return element;
         },
 
-        append: curriable(2, function (toAppend, element) {
+        append: curriable(function (toAppend, element) {
             element.appendChild(makeHTML(toAppend));
             return element;
         }),
 
-        prepend: curriable(2, function (toPrepend, element) {
+        prepend: curriable(function (toPrepend, element) {
             element.insertBefore(makeHTML(toPrepend), element.childNodes[0]);
             return element;
         }),
