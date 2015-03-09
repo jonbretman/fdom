@@ -8,14 +8,28 @@
 
     var slice = [].slice;
 
-    function curriable(fn) {
-        var arrity = fn.length;
+    /**
+     * Creates a version of `fn` that is continuously curriable until
+     * all arguments have been fulfilled. e.g.
+     *
+     *     var fn = curriable(function (one, two, three) {
+     *         return one + two + three;
+     *     });
+     *     var one = fn(1);
+     *     var three = one(2);
+     *     three(3); // -> returns `6`
+     *
+     * @param fn
+     * @param [arrity] The arrity of the original function.
+     * @param [existingArgs] The args provided so far.
+     * @returns {Function}
+     */
+    function curriable(fn, arrity, existingArgs) {
         return function () {
-            var args = slice.call(arguments);
+            arrity = arrity || fn.length;
+            var args = (existingArgs || []).concat(slice.call(arguments));
             if (args.length < arrity) {
-                return function () {
-                    return fn.apply(null, args.concat(slice.call(arguments)));
-                };
+                return curriable(fn, arrity, args);
             }
             return fn.apply(null, args);
         };

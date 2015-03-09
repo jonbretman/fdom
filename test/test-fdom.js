@@ -304,4 +304,105 @@ describe('fdom', function () {
 
     });
 
+    describe('hasAttr', function () {
+
+        it('should return true if the value of the attribute matches the given value', function () {
+            var el = document.createElement('input');
+            el.setAttribute('some-attribute', 'some-value');
+            expect(fdom.hasAttr('some-attribute', 'some-value', el)).to.equal(true);
+            expect(fdom.hasProp('some-attribute', 'not the value', el)).to.equal(false);
+        });
+
+        it('should be curriable', function () {
+            var hasAttr = fdom.hasAttr('some-attribute', 'some-value');
+            var el = document.createElement('input');
+            el.setAttribute('some-attribute', 'some-value');
+            expect(hasAttr(el)).to.equal(true);
+        });
+
+    });
+
+    describe('remove', function () {
+
+        it('should remove the element from its parent', function () {
+            var parent = document.createElement('div');
+            var child = document.createElement('div');
+            parent.appendChild(child);
+            fdom.remove(child);
+            expect(child.parentNode).to.equal(null);
+        });
+
+        it('should do nothing if the element has no parent', function () {
+            var child = document.createElement('div');
+            expect(fdom.remove(child)).to.equal(child);
+        });
+
+    });
+
+    describe('append', function () {
+
+        it('should append the given element', function () {
+            var el = document.createElement('div');
+            for (var i = 0; i < 10; i++) {
+                el.appendChild(document.createElement('p'));
+            }
+            var p = document.createElement('p');
+            fdom.append(p, el);
+            expect(el.childNodes[10]).to.equal(p);
+        });
+
+        it('should accept an HTML string', function () {
+            var el = document.createElement('div');
+            fdom.append('<p>Hello</p>', el);
+            expect(el.childNodes[0]).to.have.property('tagName', 'P');
+            expect(el.childNodes[0]).to.have.property('textContent', 'Hello');
+        });
+
+        it('should be curriable', function () {
+            var addSpan = fdom.append('<span>hello</span>');
+            var els = [];
+            for (var i = 0; i < 10; i++) {
+                els.push(document.createElement('div'));
+            }
+            els.forEach(addSpan);
+            els.forEach(function (el) {
+                expect(el.childNodes[0]).to.have.property('tagName', 'SPAN');
+            });
+        });
+
+    });
+
+    describe('prepend', function () {
+
+        it('should prened the given element', function () {
+            var el = document.createElement('div');
+            for (var i = 0; i < 10; i++) {
+                el.appendChild(document.createElement('p'));
+            }
+            var p = document.createElement('p');
+            fdom.prepend(p, el);
+            expect(el.childNodes[0]).to.equal(p);
+        });
+
+        it('should accept an HTML string', function () {
+            var el = document.createElement('div');
+            fdom.prepend('<p>Hello</p>', el);
+            expect(el.childNodes[0]).to.have.property('tagName', 'P');
+            expect(el.childNodes[0]).to.have.property('textContent', 'Hello');
+        });
+
+        it('should be curriable', function () {
+            var addSpan = fdom.prepend('<span>hello</span>');
+            var els = [];
+            for (var i = 0; i < 10; i++) {
+                els.push(document.createElement('div'));
+            }
+            els.forEach(addSpan);
+            els.forEach(function (el) {
+                expect(el.childNodes[0]).to.have.property('tagName', 'SPAN');
+            });
+        });
+
+    });
+
 });
