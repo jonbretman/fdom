@@ -1,38 +1,56 @@
 # fdom - Functional DOM stuff
 
-An experiment in a different approach to doing DOM operations to the standard jQuery style API that takes advantage of the standard array iteration methods.
+A set of curriable functions for working with the DOM.
 
-## What is it?
-`fdom` is just a load of functions that can be used to operate on single DOM elements or to create a function that can be passed to array iteration methods. For example the `addClass` method can be used like this:
-
+## What?
+Say you have an element and you want to add a class to it. The raw DOM API's work quite well here.
 ```js
-fdom.addClass('foo', someElement); // will return someElement
+document.querySelector('.foo').classList.add('special');
 ```
 
-Or if called without the second argument it will return a function that will accept the remaining argument and add the class `foo` to it and return it.
-
+But what if you want to work with more than one element?
 ```js
-var addFoo = fdom.addClass('foo');
-
-addFoo(someElement); // will return someElement
+[].slice.call(document.querySelectorAll('.foo')).forEach(function (element) {
+    element.classList.add('special');
+});;
 ```
 
-This currying style can then be used to do jQuery-like chainable operations using standard array iteration methods.
-
-
+Ugh! With ES6 this is a little nicer:
 ```js
-// jquery
-$('.foo')
-    .addClass('new-class')
-    .html('<p></p>')
-    .find('.bar')
-    .removeClass('old-class')
-
-// fdom
-fdom.query('foo', document.body)
-    .map(fdom.addClass('new-class'))
-    .map(fdom.setHTML('<p></p>'))
-    .map(fdom.query('.bar'))
-    .reduce(fdom.flatten))
-    .map(fdom.removeClass('old-class'));
+for (let element of document.querySelectorAll('.foo')) {
+    element.classList.add('special');
+}
 ```
+
+But chaining operations is still not possible, the same thing with `fdom` would be:
+```js
+// create some methods for doing the things you want to do once
+var findFoo = fdom.query('.foo');
+var addSpecialClass = fdom.addClass('special');
+
+// use them
+findFoo(document).forEach(addSpecialClass);
+```
+
+You can then use standard array methods to chain operations:
+```js
+var findInputs = fdom.query('input');
+var isText = fdom.hasProp('type', 'text');
+var isRequired = fdom.hasProp('required', true);
+var getValue = fdom.getProp('value');
+
+var values = findInputs(document)
+                 .filter(isText)
+                 .filter(isRequired)
+                 .map(getValue);
+```
+
+## Really?
+I dunno, you tell me.
+
+## Why is this better than jQuery/Zepto/etc...
+Most DOM libraries work by creating an array-like object (sometimes referred to as a collection) which have methods which work on all the elements in the object/collection. This approach does create a very clean API, however it also has to re-invent the wheel a little bit by implementing standard array methods or copying them into the prototype and making sure that the elements in the objects are integer indexed and there is a `length` property.
+
+The approach with `fdom` is different in that no special library specific objects are created, you are working with actual arrays, and therefor the methods that arrays have e.g. `map`, `forEach`, `filter`, `indexOf` etc...
+
+Ultimately it isn't a fair comparison to look at libraries like jQuery as they support older browsers whereas `fdom` assumes things like `classList` are available/polyfilled.
